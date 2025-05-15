@@ -25,12 +25,14 @@ import dotenv
 dotenv.load_dotenv()
 
 class SRT:
-    def __init__(self, dpt_stn, arr_stn, dpt_dt, dpt_tm, num_trains_to_check=2, want_reserve=False):
+    def __init__(self, dpt_stn, arr_stn, dpt_dt, dpt_tm, adult_num, child_num, num_trains_to_check=2, want_reserve=False):
         """
         :param dpt_stn: SRT 출발역
         :param arr_stn: SRT 도착역
         :param dpt_dt: 출발 날짜 YYYYMMDD 형태 ex) 20220115
         :param dpt_tm: 출발 시간 hh 형태, 반드시 짝수 ex) 06, 08, 14, ...
+        :param adult_num: 성인 인원 수
+        :param child_num: 어린이 인원 수
         :param num_trains_to_check: 검색 결과 중 예약 가능 여부 확인할 기차의 수 ex) 2일 경우 상위 2개 확인
         :param want_reserve: 예약 대기가 가능할 경우 선택 여부
         """
@@ -41,6 +43,8 @@ class SRT:
         self.arr_stn = arr_stn
         self.dpt_dt = dpt_dt
         self.dpt_tm = dpt_tm
+        self.adult_num = adult_num
+        self.child_num = child_num
 
         self.num_trains_to_check = num_trains_to_check
         self.want_reserve = want_reserve
@@ -124,6 +128,13 @@ class SRT:
         elm_dpt_tm = self.driver.find_element(By.ID, "dptTm")
         self.driver.execute_script("arguments[0].setAttribute('style','display: True;')", elm_dpt_tm)
         Select(self.driver.find_element(By.ID, "dptTm")).select_by_visible_text(self.dpt_tm)
+
+        # 인원 정보 입력
+        select_adult = Select(self.driver.find_element(By.ID, "psgInfoPerPrnb1"))
+        select_adult.select_by_value(str(int(self.adult_num)))
+
+        select_child = Select(self.driver.find_element(By.ID, "psgInfoPerPrnb5"))
+        select_child.select_by_value(str(int(self.child_num)))
 
         print("기차를 조회합니다")
         print(f"출발역:{self.dpt_stn} , 도착역:{self.arr_stn}\n날짜:{self.dpt_dt}, 시간: {self.dpt_tm}시 이후\n{self.num_trains_to_check}개의 기차 중 예약")
