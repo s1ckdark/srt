@@ -13,8 +13,9 @@ def parse_cli_args():
     parser.add_argument("--adult", help="Number of Adults", type=int, metavar="2", default=1)
     parser.add_argument("--child", help="Number of Children", type=int, metavar="2", default=0)
 
-    parser.add_argument("--num", help="no of trains to check", type=int, metavar="2", default=2)
+    parser.add_argument("--num", help="no of trains to check", type=int, metavar="4", default=4)
     parser.add_argument("--reserve", help="Reserve or not", type=bool, metavar="2", default=False)
+    parser.add_argument("--want_train", help="Train number", type=str, metavar="KTX 1234", default=None)
 
     args = parser.parse_args()
 
